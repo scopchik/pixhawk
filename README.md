@@ -1,2 +1,6 @@
-<h1>Pixhawk</h1>
-<img src = "Assets/pixhawk.jpg">
+# Pixhawk
+*Разработана игра, которая помогает научиться работать с контроллером Pixhawk для бпла.\
+В игре присутствует два режима: обучающий и тестовый*
+![Alt text](Assets/pixhawk.jpg "Обучающий режим")
+\
+![Alt text](Assets/pixhawk2.jpg "Тестовый режим")
