@@ -3,38 +3,25 @@ using UnityEngine.UI;
 
 public class ObjectInfo : MonoBehaviour
 {
-    public Text infoText; // Ссылка на текстовый объект в UI для отображения информации
-
+    public Text infoText;
     private void Start()
     {
-        // Убедимся, что у нас есть ссылка на Text в UI
         if (infoText == null)
         {
-            Debug.LogError("Не задан объект Text для отображения информации!");
+            Debug.LogError("РќРµ Р·Р°РґР°РЅ РѕР±СЉРµРєС‚ Text РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё!");
         }
     }
 
     private void OnMouseDown()
     {
-        // Получаем информацию об объекте и отображаем ее в UI
         DisplayObjectInfo();
     }
 
     private void DisplayObjectInfo()
     {
-        // Получаем имя объекта
         string objectName = gameObject.name;
-
-        // Получаем тип объекта
         string objectType = gameObject.GetType().ToString();
-
-        // Формируем строку с информацией
-        string objectInfo = "Имя объекта: " + objectName + "\nТип объекта: " + objectType;
-
-        // Отображаем информацию в UI
+        string objectInfo = "РРјСЏ РѕР±СЉРµРєС‚Р°: " + objectName + "\nРўРёРї РѕР±СЉРµРєС‚Р°: " + objectType;
         infoText.text = objectInfo;
-
-        // Дополнительно можно активировать или деактивировать окно информации
-        // infoPanel.SetActive(true);
     }
 }
