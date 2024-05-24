@@ -20,7 +20,6 @@ public class Controller : MonoBehaviour
         Test
     }
     public Mode currentMode = Mode.Tutorial;
-
     private bool isRotating = false;
     private Vector3 initialMousePosition;
     [SerializeField] private GameObject selectedObject;
@@ -48,28 +47,22 @@ public class Controller : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                // Проверяем, на какой объект мы нажали
                 GameObject clickedObject = hit.collider.gameObject;
-
-                // Если это провод, сохраняем его как selectedObject
                 if (clickedObject.CompareTag("Wire"))
                 {
                     selectedObject = clickedObject;
                     Debug.Log("Selected wire: " + selectedObject.name);
                     HandleObjectClick(selectedObject);
                 }
-                // Если это порт, сохраняем его как selectedPort
                 else if (clickedObject.CompareTag("Port"))
                 {
                     selectedPort = clickedObject;
                     Debug.Log("Selected port: " + selectedPort.name);
                     HandleObjectClick(selectedPort);
-                }
-                
+                }   
             }
             else
             {
-                // Если нажали вне объектов, начинаем вращение
                 isRotating = true;
             }
         }
@@ -81,7 +74,6 @@ public class Controller : MonoBehaviour
             {
                 if (selectedPort != null && selectedObject != null && selectedObject.CompareTag("Wire"))
                 {
-                    // Перед вызовом функции проверяем, что имена порта и провода совпадают
                     if ((selectedPort.name + ".001") == selectedObject.name)
                     {
                         Debug.Log("Calling MoveWireToPort");
@@ -89,10 +81,10 @@ public class Controller : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Ошибка: имена порта и провода не совпадают, оценка снижена");
-                        wrongText.text = "Ошибка: имена порта и провода не совпадают, оценка снижена";
+                        Debug.Log("ГЋГёГЁГЎГЄГ : ГЁГ¬ГҐГ­Г  ГЇГ®Г°ГІГ  ГЁ ГЇГ°Г®ГўГ®Г¤Г  Г­ГҐ Г±Г®ГўГЇГ Г¤Г ГѕГІ, Г®Г¶ГҐГ­ГЄГ  Г±Г­ГЁГ¦ГҐГ­Г ");
+                        wrongText.text = "ГЋГёГЁГЎГЄГ : ГЁГ¬ГҐГ­Г  ГЇГ®Г°ГІГ  ГЁ ГЇГ°Г®ГўГ®Г¤Г  Г­ГҐ Г±Г®ГўГЇГ Г¤Г ГѕГІ, Г®Г¶ГҐГ­ГЄГ  Г±Г­ГЁГ¦ГҐГ­Г ";
                         count++;
-                        wrongNumberText.text = "Ошибки: " + count.ToString();
+                        wrongNumberText.text = "ГЋГёГЁГЎГЄГЁ: " + count.ToString();
                     }
                     selectedPort = null;
                     selectedObject = null;
@@ -102,7 +94,6 @@ public class Controller : MonoBehaviour
             {
                 if (selectedPort != null && selectedObject != null && selectedObject.CompareTag("Wire"))
                 {
-                    // Перед вызовом функции проверяем, что имена порта и провода совпадают
                     if ((selectedPort.name + ".001") == selectedObject.name)
                     {
                         Debug.Log("Calling MoveWireToPort");
@@ -110,8 +101,8 @@ public class Controller : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Ошибка: имена порта и провода не совпадают");
-                        wrongText.text = "Ошибка: имена порта и провода не совпадают";
+                        Debug.Log("ГЋГёГЁГЎГЄГ : ГЁГ¬ГҐГ­Г  ГЇГ®Г°ГІГ  ГЁ ГЇГ°Г®ГўГ®Г¤Г  Г­ГҐ Г±Г®ГўГЇГ Г¤Г ГѕГІ");
+                        wrongText.text = "ГЋГёГЁГЎГЄГ : ГЁГ¬ГҐГ­Г  ГЇГ®Г°ГІГ  ГЁ ГЇГ°Г®ГўГ®Г¤Г  Г­ГҐ Г±Г®ГўГЇГ Г¤Г ГѕГІ";
                         wrongNumberText.text = "";
                     }
                     selectedPort = null;
@@ -125,15 +116,11 @@ public class Controller : MonoBehaviour
 
     private void MoveWireToPort(GameObject wire, GameObject port)
     {
-        // Получаем компонент Transform провода
         Transform wireTransform = wire.transform.GetChild(0);
-
-        // Получаем дочерний объект порта по имени
         Transform portTransform = port.transform.GetChild(0);
         float yOffset = 0f;
         float xOffset = 0f;
         float zOffset = 0f; 
-        // Если порт не найден, выходим из функции
         if (portTransform == null)
         {
             Debug.LogError("Child port object not found!");
@@ -158,31 +145,20 @@ public class Controller : MonoBehaviour
 
     private IEnumerator MoveWireAndParent(Transform parentTransform, float xOffset, float yOffset, float zOffset)
     {
-
         Vector3 startParentLocalPosition = parentTransform.localPosition;
         Vector3 targetLocalPosition = new Vector3();
         if ((xOffset == 0)|| (yOffset == 0))
         {
             targetLocalPosition = new Vector3(xOffset, zOffset, yOffset);
         }
-
-        // Задаем время, за которое провод должен переместиться к порту
-        float duration = 1f; 
-
+        float duration = 1f;
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
-            // Перемещаем родительский объект провода вместе с проводом
             parentTransform.localPosition = Vector3.Lerp(startParentLocalPosition, targetLocalPosition, elapsedTime / duration);
-
-            // Обновляем время
             elapsedTime += Time.deltaTime;
-
-            // Ждем следующего кадра
             yield return null;
         }
-
-        // Устанавливаем конечную локальную позицию родительского объекта в точности равной целевой позиции
         parentTransform.localPosition = targetLocalPosition;
     }
 
@@ -230,42 +206,42 @@ public class Controller : MonoBehaviour
 
     private void ConnectWireToPort(GameObject wire, GameObject port)
     {
-        Debug.Log("Провод вставлен в порт");
+        Debug.Log("ГЏГ°Г®ГўГ®Г¤ ГўГ±ГІГ ГўГ«ГҐГ­ Гў ГЇГ®Г°ГІ");
     }
 
     private void ConnectWire(GameObject port)
     {
-        Debug.Log("Подключен провод к порту: " + port.name);
+        Debug.Log("ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ ГЇГ°Г®ГўГ®Г¤ ГЄ ГЇГ®Г°ГІГі: " + port.name);
     }
 
     private void DisplayPortInfo(GameObject port)
     {
-        string portInfo = "Название порта: " + port.name + "\nОписание порта: " + GetPortDescription(port);
+        string portInfo = "ГЌГ Г§ГўГ Г­ГЁГҐ ГЇГ®Г°ГІГ : " + port.name + "\nГЋГЇГЁГ±Г Г­ГЁГҐ ГЇГ®Г°ГІГ : " + GetPortDescription(port);
         Debug.Log(portInfo);
         infoPortText.text = portInfo;
     }
 
     private void DisplayWireInfo(GameObject wire)
     {
-        string wireInfo = "Название порта: " + wire.name + "\nОписание порта: " + GetPortDescription(wire);
+        string wireInfo = "ГЌГ Г§ГўГ Г­ГЁГҐ ГЇГ®Г°ГІГ : " + wire.name + "\nГЋГЇГЁГ±Г Г­ГЁГҐ ГЇГ®Г°ГІГ : " + GetPortDescription(wire);
         Debug.Log(wireInfo);
         infoWireText.text = wireInfo;
     }
 
     private string GetPortDescription(GameObject port)
     {
-        return "Описание порта: ...";
+        return "ГЋГЇГЁГ±Г Г­ГЁГҐ ГЇГ®Г°ГІГ : ...";
     }
 
     private void ActivateTutorialMode()
     {
         currentMode = Mode.Tutorial;
-        Debug.Log("Переключено в режим обучения");
+        Debug.Log("ГЏГҐГ°ГҐГЄГ«ГѕГ·ГҐГ­Г® Гў Г°ГҐГ¦ГЁГ¬ Г®ГЎГіГ·ГҐГ­ГЁГї");
     }
 
     private void ActivateTestMode()
     {
         currentMode = Mode.Test;
-        Debug.Log("Переключено в тестовый режим");
+        Debug.Log("ГЏГҐГ°ГҐГЄГ«ГѕГ·ГҐГ­Г® Гў ГІГҐГ±ГІГ®ГўГ»Г© Г°ГҐГ¦ГЁГ¬");
     }
 }
